@@ -49,9 +49,8 @@ public class MainActivity extends Activity {
         mImageBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, PatternActivity.class);
-//                intent.setAction(Action.IMAGE_PATTERN);
-//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ImageActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -26,6 +26,10 @@
             android:name="com.auo.pg.PowerActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.auo.pg.ImageActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

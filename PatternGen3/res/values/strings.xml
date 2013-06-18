@@ -10,4 +10,7 @@
     <string name="str_optical_pattern">Optical Pattern</string>
     <string name="str_image_pattern">Image Pattern</string>
 
+    <string name="str_touch_mode">switch to TOUCH mode</string>
+    <string name="str_auto_mode">switch to AUTO mode</string>
+
 </resources>

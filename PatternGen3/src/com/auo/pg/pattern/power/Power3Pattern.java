@@ -44,6 +44,7 @@ public class Power3Pattern extends Pattern {
         canvas.drawBitmap(tmp, 0, 0, paint);
 
         tmp.recycle();
+        tmp = null;
 
         v.setImageBitmap(mBitmap);
     }

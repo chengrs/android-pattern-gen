@@ -2,12 +2,10 @@ package com.auo.pg;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageView;
 
 import com.auo.pg.pattern.Pattern;
@@ -20,7 +18,7 @@ import com.auo.pg.pattern.power.PowerGreenPattern;
 import com.auo.pg.pattern.power.PowerRedPattern;
 import com.auo.pg.pattern.power.PowerWhitePattern;
 
-public class PowerActivity extends Activity {
+public class PowerActivity extends NoTitleActivity {
     private final String TAG = "PowerActivity";
 
     private ImageView mView;
@@ -35,7 +33,6 @@ public class PowerActivity extends Activity {
         Log.v(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_power);
 
         mView = (ImageView) findViewById(R.id.power_pattern);
@@ -49,6 +46,18 @@ public class PowerActivity extends Activity {
         mPatternList.add(Power2Pattern.class);
         mPatternList.add(Power3Pattern.class);
 
+        showPattern();
+
+        mView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPattern.destroy();
+                showPattern();
+            }
+        });
+    }
+
+    private void showPattern() {
         if (mIndex >= mPatternList.size()) {
             mIndex = 0;
         }
@@ -62,28 +71,6 @@ public class PowerActivity extends Activity {
             e.printStackTrace();
         }
 
-        mView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPattern.destroy();
-
-                if (mIndex >= mPatternList.size()) {
-                    mIndex = 0;
-                }
-
-                try {
-                    mPattern = (mPatternList.get(mIndex)).newInstance();
-                    mPattern.setPattern(PowerActivity.this, (ImageView)v);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
-                mIndex++;
-            }
-        });
+        mIndex++;
     }
-
-    
 }

@@ -2,9 +2,8 @@ package com.auo.pg.pattern.power;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
 import android.widget.ImageView;
 
 import com.auo.pg.pattern.Pattern;
@@ -26,8 +25,6 @@ public class Power2Pattern extends Pattern {
         mWidth = v.getWidth();
         int[] pixels = new int[mWidth * mHeight];
 
-        Paint paint = new Paint();
-
         Config config = Config.ARGB_8888;
         mBitmap = Bitmap.createBitmap(mWidth, mHeight, config);
         Canvas canvas = new Canvas(mBitmap);
@@ -40,9 +37,10 @@ public class Power2Pattern extends Pattern {
 
         tmp.setPixels(pixels, 0, mWidth, 0, 0, mWidth, mHeight);
 
-        canvas.drawBitmap(tmp, 0, 0, paint);
+        canvas.drawBitmap(tmp, 0, 0, null);
 
         tmp.recycle();
+        tmp = null;
 
         v.setImageBitmap(mBitmap);
     }

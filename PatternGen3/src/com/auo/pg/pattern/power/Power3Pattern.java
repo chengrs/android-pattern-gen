@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.widget.ImageView;
 
 import com.auo.pg.pattern.Pattern;
@@ -28,8 +27,6 @@ public class Power3Pattern extends Pattern {
         mWidth = v.getWidth();
         mPixels = new int[mWidth * mHeight];
 
-        Paint paint = new Paint();
-
         Config config = Config.ARGB_8888;
         mBitmap = Bitmap.createBitmap(mWidth, mHeight, config);
         Canvas canvas = new Canvas(mBitmap);
@@ -41,7 +38,7 @@ public class Power3Pattern extends Pattern {
 
         tmp.setPixels(mPixels, 0, mWidth, 0, 0, mWidth, mHeight);
 
-        canvas.drawBitmap(tmp, 0, 0, paint);
+        canvas.drawBitmap(tmp, 0, 0, null);
 
         tmp.recycle();
         tmp = null;
@@ -57,7 +54,6 @@ public class Power3Pattern extends Pattern {
                 mPixels[i + 1] = 0xffffffff;
             }
         } else {
-            // black
             for (int i = start; i < start + mWidth; i+=2) {
                 mPixels[i] = 0xffffffff;
                 mPixels[i + 1] = 0xff000000;

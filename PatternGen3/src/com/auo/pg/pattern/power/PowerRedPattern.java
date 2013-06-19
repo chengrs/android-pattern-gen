@@ -1,21 +1,19 @@
 package com.auo.pg.pattern.power;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.auo.pg.R;
 import com.auo.pg.pattern.Pattern;
 
 public class PowerRedPattern extends Pattern {
-
     @Override
-    public void destroy() {
+    public void setPattern(Context context, ImageView v) {
+        v.setImageResource(R.drawable.red);
     }
 
     @Override
-    public void setPattern(Context context, ImageView v) {
-        Drawable drawable = context.getResources().getDrawable(R.drawable.red);
-        v.setImageDrawable(drawable);
+    public void destroy() {
+        // do nothing
     }
 }

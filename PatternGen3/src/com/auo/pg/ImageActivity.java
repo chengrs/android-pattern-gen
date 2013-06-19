@@ -4,7 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,7 +20,7 @@ import android.widget.ImageView;
 import com.auo.pg.pattern.Pattern;
 import com.auo.pg.pattern.image.ImagePattern;
 
-public class ImageActivity extends Activity {
+public class ImageActivity extends NoTitleActivity {
     private final String TAG = "ImageActivity";
 
     private final int MODE_AUTO = 1;
@@ -55,11 +53,6 @@ public class ImageActivity extends Activity {
         Log.v(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN
-//                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_image);
 
         mView = (ImageView) findViewById(R.id.image_pattern);

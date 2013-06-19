@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageView;
 
 import com.auo.pg.pattern.Pattern;
@@ -20,15 +18,18 @@ import com.auo.pg.pattern.optical.OpticalFlickerPattern;
 import com.auo.pg.pattern.optical.OpticalPattern.OpticalPatternType;
 import com.auo.pg.pattern.optical.color.OpticalGreenPattern;
 import com.auo.pg.pattern.optical.color.OpticalRedPattern;
+import com.auo.pg.pattern.optical.gray.OpticalGray127Pattern;
+import com.auo.pg.pattern.optical.gray.OpticalGray159Pattern;
+import com.auo.pg.pattern.optical.gray.OpticalGray191Pattern;
+import com.auo.pg.pattern.optical.gray.OpticalGray233Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray31Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray63Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray95Pattern;
-import com.auo.pg.pattern.optical.stick.OpticalStick1Pattern;
 import com.auo.pg.pattern.optical.stick.OpticalStick2Pattern;
 import com.auo.pg.pattern.optical.xtalk.OpticalXTalk1Pattern;
 import com.auo.pg.pattern.optical.xtalk.OpticalXTalk2Pattern;
 
-public class OpticalActivity extends Activity {
+public class OpticalActivity extends NoTitleActivity {
     private final String TAG = "OpticalActivity";
 
     // constant values defined for handler to use
@@ -43,10 +44,7 @@ public class OpticalActivity extends Activity {
 
     private Pattern mPattern;
 
-    private ArrayList<Class<? extends Pattern>> mColorPatternList = new ArrayList<Class<? extends Pattern>>();
-    private ArrayList<Class<? extends Pattern>> mGrayPatternList = new ArrayList<Class<? extends Pattern>>();
-    private ArrayList<Class<? extends Pattern>> mXTalkPatternList = new ArrayList<Class<? extends Pattern>>();
-    private ArrayList<Class<? extends Pattern>> mImageStickPatternList = new ArrayList<Class<? extends Pattern>>();
+    private ArrayList<Class<? extends Pattern>> mPatternList = new ArrayList<Class<? extends Pattern>>();
 
     private int mIndex = 0;
 
@@ -55,7 +53,6 @@ public class OpticalActivity extends Activity {
         Log.v(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_optical);
 
         mView = (ImageView) findViewById(R.id.optical_pattern);
@@ -66,7 +63,7 @@ public class OpticalActivity extends Activity {
     }
 
     private void setPatterns(byte type) {
-        mColorPatternList.clear();
+        mPatternList.clear();
         mIndex = 0;
 
         switch (type) {
@@ -93,15 +90,15 @@ public class OpticalActivity extends Activity {
     }
 
     private void setColorPatterns() {
-        mColorPatternList.add(OpticalRedPattern.class);
-        mColorPatternList.add(OpticalGreenPattern.class);
+        mPatternList.add(OpticalRedPattern.class);
+        mPatternList.add(OpticalGreenPattern.class);
 
-        if (mIndex >= mColorPatternList.size()) {
+        if (mIndex >= mPatternList.size()) {
             mIndex = 0;
         }
 
         try {
-            mPattern = (mColorPatternList.get(mIndex)).newInstance();
+            mPattern = (mPatternList.get(mIndex)).newInstance();
             mPattern.setPattern(OpticalActivity.this, mView);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -114,13 +111,13 @@ public class OpticalActivity extends Activity {
             public void onClick(View v) {
                 mPattern.destroy();
 
-                if (mIndex >= mColorPatternList.size()) {
+                if (mIndex >= mPatternList.size()) {
                     mIndex = 0;
                 }
 
                 try {
-                    mPattern = (mColorPatternList.get(mIndex)).newInstance();
-                    mPattern.setPattern(OpticalActivity.this, (ImageView)v);
+                    mPattern = (mPatternList.get(mIndex)).newInstance();
+                    mPattern.setPattern(OpticalActivity.this, (ImageView) v);
                 } catch (InstantiationException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
@@ -133,14 +130,14 @@ public class OpticalActivity extends Activity {
     }
 
     private void setFlickerPattern() {
-        mColorPatternList.add(OpticalFlickerPattern.class);
+        mPatternList.add(OpticalFlickerPattern.class);
 
-        if (mIndex >= mColorPatternList.size()) {
+        if (mIndex >= mPatternList.size()) {
             mIndex = 0;
         }
 
         try {
-            mPattern = (mColorPatternList.get(mIndex)).newInstance();
+            mPattern = (mPatternList.get(mIndex)).newInstance();
             mPattern.setPattern(OpticalActivity.this, mView);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -152,16 +149,32 @@ public class OpticalActivity extends Activity {
     }
 
     private void setGrayPattern() {
-        mColorPatternList.add(OpticalGray31Pattern.class);
-        mColorPatternList.add(OpticalGray63Pattern.class);
-        mColorPatternList.add(OpticalGray95Pattern.class);
+        mPatternList.add(OpticalGray233Pattern.class);
+        mPatternList.add(OpticalGray191Pattern.class);
+        mPatternList.add(OpticalGray159Pattern.class);
+        mPatternList.add(OpticalGray127Pattern.class);
+        mPatternList.add(OpticalGray95Pattern.class);
+        mPatternList.add(OpticalGray63Pattern.class);
+        mPatternList.add(OpticalGray31Pattern.class);
 
-        if (mIndex >= mColorPatternList.size()) {
+        showPattern();
+
+        mView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPattern.destroy();
+                showPattern();
+            }
+        });
+    }
+
+    private void showPattern() {
+        if (mIndex >= mPatternList.size()) {
             mIndex = 0;
         }
 
         try {
-            mPattern = (mColorPatternList.get(mIndex)).newInstance();
+            mPattern = (mPatternList.get(mIndex)).newInstance();
             mPattern.setPattern(OpticalActivity.this, mView);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -169,39 +182,19 @@ public class OpticalActivity extends Activity {
             e.printStackTrace();
         }
 
-        mView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPattern.destroy();
-
-                if (mIndex >= mColorPatternList.size()) {
-                    mIndex = 0;
-                }
-
-                try {
-                    mPattern = (mColorPatternList.get(mIndex)).newInstance();
-                    mPattern.setPattern(OpticalActivity.this, (ImageView)v);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
-                mIndex++;
-            }
-        });
+        mIndex++;
     }
 
     private void setXtalkPattern() {
-        mColorPatternList.add(OpticalXTalk1Pattern.class);
-        mColorPatternList.add(OpticalXTalk2Pattern.class);
+        mPatternList.add(OpticalXTalk1Pattern.class);
+        mPatternList.add(OpticalXTalk2Pattern.class);
 
-        if (mIndex >= mColorPatternList.size()) {
+        if (mIndex >= mPatternList.size()) {
             mIndex = 0;
         }
 
         try {
-            mPattern = (mColorPatternList.get(mIndex)).newInstance();
+            mPattern = (mPatternList.get(mIndex)).newInstance();
             mPattern.setPattern(OpticalActivity.this, mView);
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -213,15 +206,15 @@ public class OpticalActivity extends Activity {
     }
 
     private void setStickPattern() {
-//        mColorPatternList.add(OpticalStick1Pattern.class);
-        mColorPatternList.add(OpticalStick2Pattern.class);
+        // mColorPatternList.add(OpticalStick1Pattern.class);
+        mPatternList.add(OpticalStick2Pattern.class);
 
-        if (mIndex >= mColorPatternList.size()) {
+        if (mIndex >= mPatternList.size()) {
             mIndex = 0;
         }
 
         try {
-            mPattern = (mColorPatternList.get(mIndex)).newInstance();
+            mPattern = (mPatternList.get(mIndex)).newInstance();
             mPattern.setPattern(OpticalActivity.this, mView);
         } catch (InstantiationException e) {
             e.printStackTrace();

@@ -4,7 +4,6 @@ import java.util.TimerTask;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Message;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 

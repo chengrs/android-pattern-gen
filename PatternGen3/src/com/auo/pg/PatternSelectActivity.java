@@ -1,17 +1,15 @@
 package com.auo.pg;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 
 import com.auo.pg.pattern.optical.OpticalPattern.OpticalPatternType;
 
-public class PatternSelectActivity extends Activity {
+public class PatternSelectActivity extends NoTitleActivity {
     private final String TAG = "PatternSelectActivity";
 
 //    public static final String PATTERN_TYPE = "pattern_type";
@@ -33,7 +31,6 @@ public class PatternSelectActivity extends Activity {
         Log.v(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_pattern_select);
 
         mColor = (Button) findViewById(R.id.btn_color);

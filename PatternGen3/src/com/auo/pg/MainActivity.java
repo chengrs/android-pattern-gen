@@ -32,7 +32,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, PowerActivity.class);
-//                intent.setAction(Action.POWER_PATTERN);
                 startActivity(intent);
             }
         });
@@ -40,9 +39,8 @@ public class MainActivity extends Activity {
         mOpticalBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, PatternActivity.class);
-//                intent.setAction(Action.OPTICAL_PATTERN);
-//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, PatternSelectActivity.class);
+                startActivity(intent);
             }
         });
 

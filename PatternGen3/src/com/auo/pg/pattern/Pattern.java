@@ -9,6 +9,8 @@ public abstract class Pattern {
     protected int mHeight;
     protected int mWidth;
 
+    public int mInterval;
+
     public abstract void setPattern(Context context, ImageView v);
     public abstract void destroy();
 }

@@ -19,4 +19,15 @@
     <string name="str_touch_mode">switch to TOUCH mode</string>
     <string name="str_auto_mode">switch to AUTO mode</string>
 
+    <string name="str_gray_level">Gray Level</string>
+    <string name="str_gray_31">31</string>
+    <string name="str_gray_63">63</string>
+    <string name="str_gray_127">127</string>
+
+    <string name="str_response_time">Response Time</string>
+
+    <string name="str_image_stick">Image Stick</string>
+
+    <string name="str_hours">Hours</string>
+
 </resources>

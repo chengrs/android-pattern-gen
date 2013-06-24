@@ -12,9 +12,8 @@ import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 import com.auo.pg.Color;
-import com.auo.pg.pattern.optical.OpticalPattern;
 
-public class OpticalStick2Pattern extends OpticalPattern {
+public class OpticalStick2Pattern extends OpticalStickPattern {
 
     @Override
     public void setPattern(Context context, ImageView v) {
@@ -31,8 +30,6 @@ public class OpticalStick2Pattern extends OpticalPattern {
     }
 
     private void create(Context context) {
-        mInterval = 3 * 1000;
-
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 

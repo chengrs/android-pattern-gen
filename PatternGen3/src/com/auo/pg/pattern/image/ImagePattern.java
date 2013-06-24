@@ -20,6 +20,8 @@ public class ImagePattern extends Pattern {
 
     private Bitmap mBitmap;
 
+    public int mInterval = 5 * 1000;
+
     public OnClickListener mOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {

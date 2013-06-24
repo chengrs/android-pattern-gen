@@ -3,21 +3,20 @@ package com.auo.pg.pattern.optical.xtalk;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Bitmap.Config;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 import com.auo.pg.Color;
-import com.auo.pg.pattern.optical.OpticalPattern;
 
-public class OpticalXTalk2Pattern extends OpticalPattern {
+public class OpticalXTalk2Pattern extends OpticalXTalkPattern {
     Bitmap mBitmap;
 
     @Override
     public void setPattern(Context context, ImageView v) {
-        mInterval = 3 * 1000;
+//        mInterval = 3 * 1000;
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);

@@ -5,19 +5,29 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.auo.pg.pattern.Pattern;
 import com.auo.pg.pattern.optical.OpticalFlickerPattern;
 import com.auo.pg.pattern.optical.OpticalPattern.OpticalPatternType;
+import com.auo.pg.pattern.optical.color.OpticalBlackPattern;
+import com.auo.pg.pattern.optical.color.OpticalBluePattern;
+import com.auo.pg.pattern.optical.color.OpticalColorPattern;
 import com.auo.pg.pattern.optical.color.OpticalGreenPattern;
 import com.auo.pg.pattern.optical.color.OpticalRedPattern;
+import com.auo.pg.pattern.optical.color.OpticalWhitePattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray127Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray159Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray191Pattern;
@@ -25,9 +35,12 @@ import com.auo.pg.pattern.optical.gray.OpticalGray233Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray31Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray63Pattern;
 import com.auo.pg.pattern.optical.gray.OpticalGray95Pattern;
+import com.auo.pg.pattern.optical.stick.OpticalStick1Pattern;
 import com.auo.pg.pattern.optical.stick.OpticalStick2Pattern;
+import com.auo.pg.pattern.optical.stick.OpticalStickPattern;
 import com.auo.pg.pattern.optical.xtalk.OpticalXTalk1Pattern;
 import com.auo.pg.pattern.optical.xtalk.OpticalXTalk2Pattern;
+import com.auo.pg.pattern.optical.xtalk.OpticalXTalkPattern;
 
 public class OpticalActivity extends NoTitleActivity {
     private final String TAG = "OpticalActivity";
@@ -92,6 +105,9 @@ public class OpticalActivity extends NoTitleActivity {
     private void setColorPatterns() {
         mPatternList.add(OpticalRedPattern.class);
         mPatternList.add(OpticalGreenPattern.class);
+        mPatternList.add(OpticalBluePattern.class);
+        mPatternList.add(OpticalBlackPattern.class);
+        mPatternList.add(OpticalWhitePattern.class);
 
         if (mIndex >= mPatternList.size()) {
             mIndex = 0;
@@ -127,6 +143,68 @@ public class OpticalActivity extends NoTitleActivity {
                 mIndex++;
             }
         });
+
+        mView.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setColorDialog();
+                return false;
+            }
+        });
+    }
+
+    // this argument is used in dialog only
+    int level;
+
+    private void setColorDialog() {
+        LayoutInflater factory = LayoutInflater.from(this);
+        View view = factory.inflate(R.layout.dialog_stick, null);
+        final EditText interval = (EditText) view.findViewById(R.id.interval);
+
+        new AlertDialog.Builder(OpticalActivity.this).setTitle(R.string.str_response_time)
+                .setSingleChoiceItems(R.array.color, 0, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        level = Color.GRAY31;
+                        switch (whichButton) {
+                        case 0:
+                            level = Color.GRAY31;
+                            break;
+                        case 1:
+                            level = Color.GRAY63;
+                            break;
+                        case 2:
+                            level = Color.GRAY95;
+                            break;
+                        case 3:
+                            level = Color.GRAY233;
+                            break;
+                        }
+                    }
+                }).setView(view).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        mPattern.destroy();
+                        try {
+                            mPattern = (mPatternList.get(mIndex)).newInstance();
+
+                            ((OpticalColorPattern) mPattern).mGrayLevel = level;
+                            mPattern.setPattern(OpticalActivity.this, mView);
+                        } catch (InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+
+                        String intv = interval.getText().toString();
+                        if (TextUtils.isEmpty(intv)) {
+                            intv = "5";
+                        }
+                        mPattern.mInterval = Integer.parseInt(interval.getText().toString()) * 1000;
+                    }
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // simply cancel
+                    }
+                }).create().show();
     }
 
     private void setFlickerPattern() {
@@ -202,11 +280,63 @@ public class OpticalActivity extends NoTitleActivity {
             e.printStackTrace();
         }
 
-        mView.setOnClickListener(null);
+        mView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPattern.destroy();
+                showPattern();
+            }
+        });
+
+        mView.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setXTalkDialog();
+                return false;
+            }
+        });
+    }
+
+    private void setXTalkDialog() {
+        new AlertDialog.Builder(OpticalActivity.this)
+        .setTitle(R.string.str_gray_level)
+                .setSingleChoiceItems(R.array.xtalk, 0, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        switch (whichButton) {
+                        case 0:
+                            level = Color.GRAY31;
+                            break;
+                        case 1:
+                            level = Color.GRAY63;
+                            break;
+                        case 2:
+                            level = Color.GRAY127;
+                            break;
+                        }
+                    }
+                }).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        mPattern.destroy();
+                        try {
+                            mPattern = (mPatternList.get(mIndex)).newInstance();
+
+                            ((OpticalXTalkPattern) mPattern).mGrayLevel = level;
+                            mPattern.setPattern(OpticalActivity.this, mView);
+                        } catch (InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // simply cancel
+                    }
+                }).create().show();
     }
 
     private void setStickPattern() {
-        // mColorPatternList.add(OpticalStick1Pattern.class);
+        mPatternList.add(OpticalStick1Pattern.class);
         mPatternList.add(OpticalStick2Pattern.class);
 
         if (mIndex >= mPatternList.size()) {
@@ -222,7 +352,44 @@ public class OpticalActivity extends NoTitleActivity {
             e.printStackTrace();
         }
 
-        mView.setOnClickListener(null);
+        mView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPattern.destroy();
+                showPattern();
+            }
+        });
+
+        mView.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setStickDialog();
+                return false;
+            }
+        });
+    }
+
+    private void setStickDialog() {
+        LayoutInflater factory = LayoutInflater.from(this);
+        View view = factory.inflate(R.layout.dialog_stick, null);
+        final EditText interval = (EditText) view.findViewById(R.id.interval);
+
+        new AlertDialog.Builder(OpticalActivity.this)
+            .setTitle(R.string.str_image_stick)
+            .setView(view)
+            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // counted in hours
+                    mPattern.mInterval = Integer.parseInt(interval.getText().toString()) * 60 * 60 * 1000;
+                }
+            })
+            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // simply cancel
+                }
+            })
+           .create()
+           .show();
     }
 
     private void startTimer(byte type) {
@@ -251,10 +418,11 @@ public class OpticalActivity extends NoTitleActivity {
 
         switch (type) {
         case OpticalPatternType.TYPE_COLOR:
-            mTimer.schedule(mTimerTask, mPattern.mInterval, mPattern.mInterval);
+            int interval = ((OpticalColorPattern)mPattern).mInterval;
+            mTimer.schedule(mTimerTask, interval, interval);
             break;
         case OpticalPatternType.TYPE_STICK:
-            mTimer.schedule(mTimerTask, mPattern.mInterval);
+            mTimer.schedule(mTimerTask, ((OpticalStickPattern)mPattern).mInterval);
             break;
         }
     }

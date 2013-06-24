@@ -30,7 +30,6 @@ public class ImageActivity extends NoTitleActivity {
     private final static byte REFRESH_IMAGE = 0x01;
 
     private int mMode = MODE_TOUCH;
-    private static int mInterval = 5 * 1000;
 
     private ImageView mView;
 
@@ -81,7 +80,7 @@ public class ImageActivity extends NoTitleActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder(ImageActivity.this);
         LayoutInflater factory = LayoutInflater.from(ImageActivity.this);
 
-        final View view = factory.inflate(R.layout.dialog_image, null);
+        View view = factory.inflate(R.layout.dialog_image, null);
 
         final Button mode = (Button) view.findViewById(R.id.btn_mode);
         Button ok = (Button) view.findViewById(R.id.ok);
@@ -119,12 +118,12 @@ public class ImageActivity extends NoTitleActivity {
         ok.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mInterval = Integer.parseInt(interval.getText().toString()) * 1000;
+                mPattern.mInterval = Integer.parseInt(interval.getText().toString()) * 1000;
                 ad.dismiss();
             }
         });
 
-        interval.setText("5");
+        interval.setText(String.valueOf(((ImagePattern)mPattern).mInterval / 1000));
 
         ad.show();
     }
@@ -156,7 +155,7 @@ public class ImageActivity extends NoTitleActivity {
             };
         }
         
-        mTimer.schedule(mTimerTask, 0, mInterval);
+        mTimer.schedule(mTimerTask, 0, mPattern.mInterval);
     }
 
     static class PatternHandler extends Handler {

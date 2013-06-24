@@ -27,7 +27,6 @@ public class OpticalPattern extends Pattern {
     protected Bitmap mBitmap;
     protected Bitmap mBitmap2;
 
-//    private Timer mTimer = null;
     protected TimerTask mTimerTask = null;
     protected int mLevel;
 

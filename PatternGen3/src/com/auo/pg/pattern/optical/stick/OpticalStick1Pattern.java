@@ -2,24 +2,23 @@ package com.auo.pg.pattern.optical.stick;
 
 import java.util.TimerTask;
 
-import com.auo.pg.Color;
-import com.auo.pg.pattern.optical.OpticalPattern;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Bitmap.Config;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
-public class OpticalStick1Pattern extends OpticalPattern {
+import com.auo.pg.Color;
+
+public class OpticalStick1Pattern extends OpticalStickPattern {
 
     @Override
     public void setPattern(Context context, ImageView v) {
         if ((mBitmap == null) || (mBitmap2 == null)) {
-            create(context, 31);
+            create(context);
         }
 
         if (mIsFirst) {
@@ -30,9 +29,7 @@ public class OpticalStick1Pattern extends OpticalPattern {
         mIsFirst = !mIsFirst;
     }
 
-    private void create(Context context, int level) {
-        mInterval = 3 * 1000;
-
+    private void create(Context context) {
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 

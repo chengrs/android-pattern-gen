@@ -3,27 +3,26 @@ package com.auo.pg.pattern.optical.color;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Bitmap.Config;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
-public class OpticalGreenPattern extends OpticalColorPattern {
+public class OpticalBlackPattern extends OpticalColorPattern {
     @Override
     public void setPattern(Context context, ImageView v) {
-        if (mBitmap == null) {
+        if ((mBitmap == null) || (mBitmap2 == null)) {
             create(context);
         }
 
         if (mIsFirst) {
-            mIsFirst = false;
             v.setImageBitmap(mBitmap);
         } else {
-            mIsFirst = true;
             v.setImageBitmap(mBitmap2);
         }
+        mIsFirst = !mIsFirst;
     }
 
     private void create(Context context) {
@@ -34,7 +33,7 @@ public class OpticalGreenPattern extends OpticalColorPattern {
         mWidth = dm.widthPixels;
 
         Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.BLACK);
 
         Config config = Config.ARGB_8888;
         mBitmap = Bitmap.createBitmap(mWidth, mHeight, config);
@@ -45,12 +44,5 @@ public class OpticalGreenPattern extends OpticalColorPattern {
         canvas = new Canvas(mBitmap2);
         paint.setARGB(255, mGrayLevel, mGrayLevel, mGrayLevel);
         canvas.drawPaint(paint);
-
-//        mTimerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                // send message to handler
-//            }
-//        };
     }
 }
